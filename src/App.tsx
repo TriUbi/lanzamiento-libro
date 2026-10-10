@@ -63,7 +63,7 @@ function App() {
     }
 
     if (voice && !voiceStartedRef.current) {
-      voice.volume = 2
+      voice.volume = 0.5
       voiceStartedRef.current = true
 
       void voice.play().catch(() => {
