@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
-// 7 de noviembre, 15:00 en Suecia (UTC+1).
+// 7 de noviembre de 2026, 15:00 en Suecia (UTC+1).
 const launchDate = new Date('2026-11-07T15:00:00+01:00').getTime()
 
 function getTimeLeft() {
@@ -33,6 +33,12 @@ function App() {
   const [isOpen, setIsOpen] = useState(false)
   const [timeLeft, setTimeLeft] = useState(getTimeLeft)
 
+  const pianoRef = useRef<HTMLAudioElement>(null)
+  const voiceRef = useRef<HTMLAudioElement>(null)
+
+  const pianoStartedRef = useRef(false)
+  const voiceStartedRef = useRef(false)
+
   useEffect(() => {
     const timer = window.setInterval(() => {
       setTimeLeft(getTimeLeft())
@@ -40,6 +46,31 @@ function App() {
 
     return () => window.clearInterval(timer)
   }, [])
+
+  function openLetter() {
+    setIsOpen(true)
+
+    const piano = pianoRef.current
+    const voice = voiceRef.current
+
+    if (piano && !pianoStartedRef.current) {
+      piano.volume = 0.02
+      pianoStartedRef.current = true
+
+      void piano.play().catch(() => {
+        pianoStartedRef.current = false
+      })
+    }
+
+    if (voice && !voiceStartedRef.current) {
+      voice.volume = 1
+      voiceStartedRef.current = true
+
+      void voice.play().catch(() => {
+        voiceStartedRef.current = false
+      })
+    }
+  }
 
   const countdown = [
     { label: 'Días', value: timeLeft.days },
@@ -50,6 +81,19 @@ function App() {
 
   return (
     <main className="invitation">
+      <audio
+        ref={pianoRef}
+        src={`${import.meta.env.BASE_URL}piano.mp3`}
+        loop
+        preload="none"
+      />
+
+      <audio
+        ref={voiceRef}
+        src={`${import.meta.env.BASE_URL}trinidad-voice.mp3`}
+        preload="auto"
+      />
+
       <div className="starfield" aria-hidden="true">
         {stars.map((star) => (
           <span
@@ -67,7 +111,7 @@ function App() {
         ))}
 
         <img
-         className={`moon ${isOpen ? 'moon-letter' : 'moon-envelope'}`}
+          className={`moon ${isOpen ? 'moon-letter' : 'moon-envelope'}`}
           src={`${import.meta.env.BASE_URL}luna.png`}
           alt=""
         />
@@ -80,7 +124,7 @@ function App() {
           <button
             className="envelope"
             type="button"
-            onClick={() => setIsOpen(true)}
+            onClick={openLetter}
             aria-label="Abrir mi carta"
           >
             <img
@@ -94,7 +138,6 @@ function App() {
             <h1>Hay palabras que quiero compartir contigo.</h1>
 
             <div className="countdown">
-          
               {timeLeft.remaining > 0 ? (
                 <div className="countdown-values" role="timer">
                   {countdown.map((item) => (
@@ -102,6 +145,7 @@ function App() {
                       <span className="countdown-number">
                         {String(item.value).padStart(2, '0')}
                       </span>
+
                       <span className="countdown-label">
                         {item.label}
                       </span>
