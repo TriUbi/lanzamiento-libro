@@ -54,7 +54,7 @@ function App() {
     const voice = voiceRef.current
 
     if (piano && !pianoStartedRef.current) {
-      piano.volume = 0.02
+      piano.volume = 0.01
       pianoStartedRef.current = true
 
       void piano.play().catch(() => {
@@ -63,7 +63,7 @@ function App() {
     }
 
     if (voice && !voiceStartedRef.current) {
-      voice.volume = 1
+      voice.volume = 10
       voiceStartedRef.current = true
 
       void voice.play().catch(() => {
