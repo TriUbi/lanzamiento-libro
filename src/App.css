@@ -10,101 +10,56 @@
   place-items: center;
   min-height: 100svh;
   padding: 24px;
-  overflow: hidden;
+  background: #000;
   color: #f6eee3;
-  font-family: Georgia, serif;
-  background: linear-gradient(
-    130deg,
-    #060b19,
-    #17243f,
-    #30213e,
-    #0c2536
-  );
-  background-size: 300% 300%;
-  animation: sky 20s ease-in-out infinite;
+  font-family: "Cormorant Garamond", Georgia, serif;
 }
-/* Estrellas pequeñas y lejanas */
-.invitation::before {
-  content: "";
-  position: absolute;
+
+/* Cielo que ocupa toda la pantalla */
+.starfield {
+  position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
+  overflow: hidden;
   pointer-events: none;
-
-  background-image:
-    radial-gradient(circle at 17px 29px, #ffffff99 0.6px, transparent 1px),
-    radial-gradient(circle at 83px 137px, #cbdcff88 0.7px, transparent 1.2px),
-    radial-gradient(circle at 149px 61px, #ffffff66 0.5px, transparent 1px),
-    radial-gradient(circle at 37px 191px, #ffffff55 0.6px, transparent 1px),
-    radial-gradient(circle at 211px 113px, #ffefd577 0.7px, transparent 1.2px);
-
-  background-size:
-    233px 251px,
-    317px 293px,
-    401px 367px,
-    283px 419px,
-    457px 331px;
-
-  opacity: 0.8;
 }
 
-/* Estrellas brillantes y una luz distante */
-.invitation::after {
-  content: "";
+.star {
   position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-
-  background-image:
-    radial-gradient(
-      circle at 15% 22%,
-      #fff 0.8px,
-      #d5e4ff66 1.5px,
-      transparent 4px
-    ),
-    radial-gradient(
-      circle at 76% 16%,
-      #fff 1px,
-      #d5e4ff55 2px,
-      transparent 5px
-    ),
-    radial-gradient(
-      circle at 88% 68%,
-      #fff 0.8px,
-      #ffe8cc44 1.8px,
-      transparent 4px
-    ),
-    radial-gradient(
-      circle at 28% 81%,
-      #fff 0.8px,
-      #d5e4ff44 1.5px,
-      transparent 4px
-    ),
-    radial-gradient(
-      ellipse at 65% 35%,
-      rgb(105 124 177 / 12%),
-      transparent 55%
-    );
-
-  animation: starlight 7s ease-in-out infinite alternate;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    0 0 4px rgb(255 255 255 / 80%),
+    0 0 10px rgb(220 230 255 / 45%);
+  animation: twinkle 3s ease-in-out infinite;
 }
 
-@keyframes starlight {
-  from {
-    opacity: 0.55;
+/* Cada estrella tiene su propio ritmo */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(0.75);
   }
-  to {
+
+  45% {
     opacity: 1;
+    transform: scale(1.25);
+  }
+
+  70% {
+    opacity: 0.4;
+    transform: scale(0.9);
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .invitation::after {
-    animation: none;
-  }
+/* Contenido por encima de las estrellas */
+.envelope-screen,
+.letter-view {
+  position: relative;
+  z-index: 1;
 }
 
+/* Sobre exactamente en el centro */
 .envelope-screen {
   width: 100%;
   max-width: 520px;
@@ -116,24 +71,20 @@
 }
 
 .eyebrow {
-  font-family: Arial, sans-serif;
-  font-size: 11px;
-  font-weight: normal;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-}
-
-.envelope-screen > .eyebrow {
   align-self: end;
   margin: 0 0 36px;
   color: #e3d5c2;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
 }
 
 .envelope {
-  width: min(55vw, 210px);
   display: block;
-  padding: 0;
+  width: min(55vw, 210px);
   margin: 0;
+  padding: 0;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -143,163 +94,56 @@
   display: block;
   width: 100%;
   height: auto;
+  filter: drop-shadow(0 12px 24px rgb(0 0 0 / 40%));
   animation: heartbeat 2.8s ease-in-out infinite;
-  filter: drop-shadow(0 14px 22px #00000040);
 }
 
-.envelope-screen > h1 {
+.envelope-screen h1 {
   align-self: start;
   max-width: 340px;
   margin: 36px 0 0;
-  font-size: clamp(20px, 4vw, 27px);
-  font-weight: normal;
-  line-height: 1.6;
-}
-
-/* Oculta los controles anteriores si aún están en App.tsx */
-.envelope-screen > p:not(.eyebrow),
-.envelope-screen > .open-button {
-  display: none;
-}
-
-.envelope:focus-visible,
-.open-button:focus-visible {
-  outline: 2px solid #e3d5c2;
-  outline-offset: 10px;
-}
-
-.letter {
-  width: 100%;
-  max-width: 620px;
-  padding: clamp(28px, 6vw, 56px);
-  background: #fffaf1;
-  color: #49382e;
-  box-shadow: 0 20px 70px #00000030;
-}
-
-.letter h1 {
-  font-size: 32px;
-  font-weight: normal;
-}
-
-.letter p {
-  line-height: 1.9;
-}
-
-.signature {
-  font-size: 24px;
-  font-style: italic;
-}
-
-.open-button {
-  padding: 12px 22px;
-  margin-top: 20px;
-  border: 1px solid #8a6248;
-  border-radius: 24px;
-  background: transparent;
-  color: #49382e;
-  font: inherit;
-  cursor: pointer;
-}
-
-@keyframes sky {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes heartbeat {
-  0%, 45%, 100% {
-    transform: scale(1);
-  }
-  14% {
-    transform: scale(1.045);
-  }
-  26% {
-    transform: scale(1);
-  }
-  36% {
-    transform: scale(1.025);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .invitation,
-  .envelope-image {
-    animation: none;
-  }
-}
-
-.invitation {
-  font-family: "Cormorant Garamond", Georgia, serif;
-}
-
-.eyebrow {
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 3px;
-}
-
-.envelope-screen > h1 {
   font-size: clamp(27px, 5vw, 38px);
   font-weight: 400;
   font-style: italic;
   line-height: 1.4;
 }
 
-.letter h1 {
-  font-size: clamp(36px, 6vw, 48px);
-  font-weight: 500;
+@keyframes heartbeat {
+  0%, 45%, 100% {
+    transform: scale(1);
+  }
+
+  14% {
+    transform: scale(1.045);
+  }
+
+  26% {
+    transform: scale(1);
+  }
+
+  36% {
+    transform: scale(1.025);
+  }
 }
 
-.letter p {
-  font-size: 22px;
-  line-height: 1.7;
-}
-
-.letter .signature {
-  font-size: 30px;
-  font-style: italic;
-}
-
-.open-button {
-  font-family: inherit;
-  font-size: 20px;
+/* Imagen completa del pergamino */
+.letter-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 24px 0;
 }
 
 .letter {
-  position: relative;
-  width: 100%;
-  max-width: 680px;
-  padding: clamp(36px, 7vw, 70px);
-
-  background:
-    radial-gradient(
-      ellipse at 20% 30%,
-      rgb(255 255 255 / 45%),
-      transparent 65%
-    ),
-    linear-gradient(
-      90deg,
-      #dfc99e,
-      #f4e5c8 5%,
-      #fff3d9 50%,
-      #f4e5c8 95%,
-      #dfc99e
-    );
-
-  border-top: 8px solid #d6bc8d;
-  border-bottom: 8px solid #d6bc8d;
-  border-radius: 8px;
-  color: #49382e;
-  box-shadow:
-    0 25px 80px rgb(0 0 0 / 35%),
-    inset 0 0 40px rgb(139 99 47 / 12%);
-
+  display: block;
+  width: min(100%, 520px);
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
   animation: parchment-open 1.8s ease-in-out both;
 }
 
@@ -307,14 +151,14 @@
   0% {
     opacity: 0;
     filter: blur(14px);
-    clip-path: inset(48% 0 48% 0 round 8px);
+    clip-path: inset(48% 0 48% 0);
     transform: translateY(20px) scale(0.94);
   }
 
   25% {
     opacity: 1;
     filter: blur(10px);
-    clip-path: inset(44% 0 44% 0 round 8px);
+    clip-path: inset(44% 0 44% 0);
     transform: translateY(12px) scale(0.97);
   }
 
@@ -325,110 +169,54 @@
   100% {
     opacity: 1;
     filter: blur(0);
-    clip-path: inset(0 round 8px);
+    clip-path: inset(0);
     transform: translateY(0) scale(1);
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .letter {
-    animation: none;
-  }
-}
+.open-button {
+  margin: 0;
+  padding: 12px 30px;
+  border: 1px solid #cbb58e;
+  border-radius: 5px;
 
-.letter {
-  width: min(100%, 680px);
-  min-height: 740px;
-  padding: 110px 85px;
+  background: linear-gradient(
+    110deg,
+    #ddc8a4,
+    #fff1d5 35%,
+    #f2e2c3 70%,
+    #ddc8a4
+  );
 
-  background-color: transparent;
-  background-size: 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-
-  animation: parchment-open 1.8s ease-in-out both;
-}
-
-@media (max-width: 600px) {
-  .letter {
-    min-height: 580px;
-    padding: 80px 40px;
-  }
-
-  .letter p {
-    font-size: 20px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .letter {
-    animation: none;
-  }
-}
-
-.letter,
-.letter h1,
-.letter p,
-.letter .eyebrow,
-.letter .signature,
-.letter .open-button {
-font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(24px, 4.5vw, 30px);
-  font-weight: 400;
-  font-style: normal;
-  line-height: 1.55;
-  letter-spacing: normal;
-  text-transform: none;
-  color: #44352b;
-}
-
-.letter h1,
-.letter p {
-  margin: 0 0 20px;
-}
-
-.letter .signature {
-  margin-top: 28px;
-}
-
-.letter {
-  width: min(100%, 520px);
-  max-width: 520px;
-  min-height: 0;
-  margin: 24px auto;
-  padding: 110px 70px 100px;
-  text-align: left;
-}
-
-.letter h1,
-.letter p,
-.letter .eyebrow,
-.letter .signature,
-.letter .open-button {
+  color: #49382e;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1.45;
-}
-
-.letter h1,
-.letter p {
-  margin: 0 0 12px;
-}
-
-.letter .signature {
-  margin-top: 16px;
+  font-size: 22px;
+  font-weight: 500;
   font-style: italic;
+
+  box-shadow:
+    inset 0 0 12px rgb(139 99 47 / 12%),
+    0 5px 18px rgb(0 0 0 / 30%);
+
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.letter .open-button {
-  display: block;
-  margin: 24px auto 0;
-  padding: 8px 16px;
+.open-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 0 12px rgb(139 99 47 / 12%),
+    0 8px 24px rgb(0 0 0 / 40%);
+}
+
+.open-button:active {
+  transform: translateY(0);
+}
+
+.envelope:focus-visible,
+.open-button:focus-visible {
+  outline: 2px solid #e3d5c2;
+  outline-offset: 8px;
 }
 
 @media (max-width: 600px) {
@@ -436,21 +224,94 @@ font-family: "Cormorant Garamond", Georgia, serif;
     padding: 16px;
   }
 
-  .letter {
-    padding: 85px 42px 80px;
-  }
-
-  .letter h1,
-  .letter p,
-  .letter .signature,
-  .letter .open-button {
-    font-size: 17px;
+  .envelope-screen {
+    min-height: calc(100svh - 32px);
   }
 }
 
-.letter-view,
-.letter-view > .letter {
-  background: transparent;
-  border: none;
-  box-shadow: none;
+@media (prefers-reduced-motion: reduce) {
+  .star,
+  .envelope-image,
+  .letter {
+    animation: none;
+  }
+
+  .star {
+    opacity: 0.8;
+  }
+}
+
+
+
+/* Texto y cuenta regresiva debajo del sobre */
+.envelope-footer {
+  align-self: start;
+  width: 100%;
+  padding-top: 30px;
+  padding-bottom: 24px;
+  text-align: center;
+}
+
+.envelope-footer h1 {
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.countdown {
+  margin-top: 28px;
+}
+
+.countdown-title {
+  margin: 0 0 14px;
+  color: #e3d5c2;
+  font-size: 18px;
+  font-style: italic;
+}
+
+.countdown-values {
+  display: flex;
+  justify-content: center;
+  gap: clamp(14px, 4vw, 28px);
+}
+
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.countdown-number {
+  color: #fff4df;
+  font-size: clamp(28px, 6vw, 38px);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.countdown-label {
+  color: #c7baa6;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.moon {
+  transition: width 0.8s ease;
+}
+
+.moon-letter {
+ width: clamp(150px, 24vw, 300px);
+}
+
+.moon-envelope {
+  width: clamp(150px, 24vw, 300px);
+}
+
+@media (max-width: 600px) {
+  .moon-letter {
+  width: 150px;
+  }
+
+  .moon-envelope {
+    width: 150px;
+  }
 }
